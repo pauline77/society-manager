@@ -8,7 +8,7 @@ import {Employe} from 'class/employe';
 import {Poste} from 'class/poste';
 import {Departement} from 'class/departement';
 
-import {DepartementItem, PosteItem, EmployeItem} from 'components/organisationItem';
+// import {DepartementItem, PosteItem, EmployeItem} from 'components/organisationItem';
 
 import {StorageService} from 'services/storageService';
 import {DatasService} from 'services/datasService';forwardRef
@@ -17,16 +17,11 @@ import {DatasService} from 'services/datasService';forwardRef
   	selector: 'society',
   	appInjector: [DatasService]
 })
-@RouteConfig([
-  { path: '/departement:{{}}', component: Departement, as: 'departement'},
-  { path: '/poste', component: Poste, as: 'poste'},
-  { path: '/employe', component: Employe, as:'employe'}
-])
 @View({
   templateUrl: 'templates/index.html',
-  	directives: [NgFor, DepartementItem, PosteItem, forwardRef(()=> DepartementDetail)]
+  	directives: [NgFor,forwardRef(()=>  DepartementItem), forwardRef(()=> PosteItem), forwardRef(()=> DepartementDetail)]
 })
-class Society {
+export class Society {
 	departements: Array<Departement>;
 	datasService: DatasService;
 	departementDetail: DepartementDetail;
@@ -37,13 +32,15 @@ class Society {
 		console.log(this.departements);
 	}
 
-	afficherPoste(poste) {
-    	this.departementDetail;
+	updateDepartementDetail(postes) {
+		this.departementDetail.updatePostes(postes);
   	}
   	
  	registerDepartementDetail(departementDetail: DepartementDetail){
  		this.departementDetail = departementDetail;
  	}
+
+
 }
 
 @Component({
@@ -52,15 +49,89 @@ class Society {
 })
 @View({
   templateUrl: 'templates/departement.html',
-  	directives: [NgFor, PosteItem]
+  	directives: [NgFor, forwardRef(()=> PosteItem)]
 })
 class DepartementDetail {
 	society:Society;
+	postes: Array<Poste>;
 
  	constructor(@Parent() society: Society){
  		this.society = society;
  		this.society.registerDepartementDetail(this);
  	}
 
+ 	updatePostes(postes) {
+ 		this.postes = postes;
+ 		console.log(this.postes);
+ 	}
 } 
+
+@Component({
+	selector: 'departement-item',
+	properties: ['departement']
+})
+@View({
+	templateUrl: 'templates/departement-item.html',
+	directives: [forwardRef(()=>PosteItem)]
+})
+export class DepartementItem
+{
+    departement: Departement;
+    society: Society;
+
+    constructor(@Parent() society: Society) {
+        this.society = society;
+    }
+
+    afficherPoste(postes) {
+        this.society.updateDepartementDetail(postes);
+    }
+}
+
+
+@Component({
+	selector: 'poste-item',
+	properties: ['poste']
+})
+@View({
+	template: `<h1>POSTE</h1>`,
+	directives: [forwardRef(()=>EmployeItem)]
+})
+export class PosteItem
+{
+    poste: Poste;
+    private departement: DepartementItem;
+
+    constructor(@Parent() departement: DepartementItem) {
+        this.departement = departement;
+    }
+
+    getDepartement() {
+        return this.departement;
+    }
+}
+
+
+@Component({
+	selector: 'employe-item',
+	properties: ['employe']
+})
+@View({
+	templateUrl: ''
+})
+export class EmployeItem
+{
+    employe: Employe;
+    private poste: PosteItem;
+
+    constructor(@Parent() poste: PosteItem) {
+        this.poste = poste;
+    }
+
+    getPoste() {
+        return this.poste;
+    }
+}
+
+
 bootstrap(Society, [routerInjectables]);
