@@ -16,7 +16,7 @@ import {DatasService} from 'services/datasService';
 })
 @View({
   templateUrl: 'templates/index.html',
-  	directives: [NgFor, DepartementItem, PosteItem]
+  	directives: [NgFor, DepartementItem, PosteItem, EmployeItem]
 })
 class Society {
 	departements: Array<Departement>;
