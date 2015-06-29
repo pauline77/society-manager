@@ -38,8 +38,9 @@ class Society {
 	}
 
 	afficherPoste(poste) {
-    this.departementDetail;
-  }
+    	this.departementDetail;
+  	}
+  	
  	registerDepartementDetail(departementDetail: DepartementDetail){
  		this.departementDetail = departementDetail;
  	}
