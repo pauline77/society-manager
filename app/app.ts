@@ -9,7 +9,8 @@ import {StorageService} from 'services/storageService';
   selector: 'society'
 })
 @View({
-  template: '<h1>Coucou</h1>'
+  template: '<h1>Coucou</h1><departement></departement>',
+  directives: [Employe]
 })
 class Society {
 
