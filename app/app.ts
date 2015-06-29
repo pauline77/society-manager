@@ -5,19 +5,28 @@ import {Employe} from 'class/employe';
 import {Poste} from 'class/poste';
 import {Departement} from 'class/departement';
 
-import {DepartementItem} from 'components/departementItem';
-import {PosteItem} from 'components/posteItem';
-import {EmployeItem} from 'components/employeItem';
+import {DepartementItem, PosteItem, EmployeItem} from 'components/organisationItem';
 
 import {StorageService} from 'services/storageService';
+import {DatasService} from 'services/datasService';
 
 @Component({
-  selector: 'society'
+  selector: 'society',
+  	appInjector: [DatasService]
 })
 @View({
-  template: '<h1>Coucou</h1>'
+  templateUrl: 'templates/index.html',
+  	directives: [NgFor, DepartementItem, PosteItem]
 })
 class Society {
+	departements: Array<Departement>;
+	datasService: DatasService;
+
+	constructor(datasService: DatasService) {
+		this.datasService = datasService;
+		this.departements = this.datasService.getDatas();
+		console.log(this.departements);
+	}
 }
 
 bootstrap(Society);
