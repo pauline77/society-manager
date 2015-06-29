@@ -1,0 +1,12 @@
+<h1>Salut</h1>
+<form [ng-form-model]='departementForm' onsubmit="return false">
+    <p>Département <input type='text' ng-control='departement'></p>
+    <button (click)='addDepartement($event)'>Ajouter</button>
+</form>
+<ul>
+	<li *ng-for="#departement of departements; #i = index">
+		<departement-item [departement]="departement"></departement-item>
+		<button (click)="deleteDepartement(i)">X</button>
+		<button (click)="updateDepartement(i)">/</button>
+	</li>
+</ul>
