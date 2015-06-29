@@ -5,9 +5,9 @@ export class Departement
     private libelle: String;
     private postes: Array<Poste>;
 
-    constructor(libelle: String) {
+    constructor(libelle: String, postes: Array<Poste> = []) {
         this.libelle = libelle;
-        this.postes = [];
+        this.postes = postes;
     }
 
     getLibelle() {

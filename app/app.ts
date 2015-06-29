@@ -37,6 +37,7 @@ class Society {
         e.preventDefault();
         if(this.departementForm.valid) { // return true or false, depending on the form state
             this.datasService.addDepartement(this.departementForm.value.departement);
+            this.departementForm.departement = "";
         } else {
             console.error("invalid form", this.departementForm);
         }

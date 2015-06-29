@@ -5,9 +5,9 @@ export class Poste
     private libelle: String;
     private employes: Array<Employe>;
 
-    constructor(libelle: String) {
+    constructor(libelle: String, employes: Array<Employe> = []) {
         this.libelle = libelle;
-        this.employes = [];
+        this.employes = employes;
     }
 
     getLibelle() {
