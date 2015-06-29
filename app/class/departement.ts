@@ -1,14 +1,5 @@
-/// <reference path="../../typings/tsd.d.ts" />
-import {Component, View, bootstrap, NgFor, forwardRef} from 'angular2/angular2';
-import {Poste} from 'components/poste';
+import {Poste} from 'class/poste';
 
-@Component({
-  selector: 'departement'
-})
-@View({
-  templateUrl: '',
-  directives: [forwardRef(()=>Poste)]
-})
 export class Departement
 {
     private libelle: String;
@@ -23,11 +14,17 @@ export class Departement
         return this.libelle;
     }
 
+    setLibelle(libelle: String) {
+        this.libelle = libelle;
+        return this;
+    }
+
     getPostes() {
         return this.postes;
     }
 
     addPoste(libelle: String) {
-        this.postes.push(new Poste(this, libelle));
+        this.postes.push(new Poste(libelle));
+        return this;
     }
 }

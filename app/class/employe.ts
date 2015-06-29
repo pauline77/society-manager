@@ -1,23 +1,11 @@
-/// <reference path="../../typings/tsd.d.ts" />
-import {Component, View, bootstrap, NgFor, Parent} from 'angular2/angular2';
-import {Poste} from 'components/poste';
-
-@Component({
-  selector: 'departement'
-})
-@View({
-  templateUrl: ''
-})
 export class Employe
 {
     private nom: String;
     private prenom: String;
     private ddn: Date;
     private sexe: String;
-    private poste: Poste;
 
-    constructor(@Parent() poste: Poste, nom: String, prenom: String, ddn: Date, sexe: String) {
-        this.poste = poste;
+    constructor(nom: String, prenom: String, ddn: Date, sexe: String) {
         this.nom = nom;
         this.prenom = prenom;
         this.ddn = ddn;
@@ -28,19 +16,35 @@ export class Employe
         return this.nom;
     }
 
+    setNom(nom: String) {
+        this.nom = nom;
+        return this;
+    }
+
     getPrenom() {
         return this.prenom;
+    }
+
+    setPrenom(prenom: String) {
+        this.prenom = prenom;
+        return this;
     }
 
     getDdn() {
         return this.ddn;
     }
 
+    setDdn(ddn: Date) {
+        this.ddn = ddn;
+        return this;
+    }
+
     getSexe() {
         return this.sexe;
     }
 
-    getPoste() {
-        return this.poste;
+    setSexe(sexe: String) {
+        this.sexe = sexe;
+        return this;
     }
 }
