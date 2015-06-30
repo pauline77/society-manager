@@ -97,6 +97,13 @@ class App {
         this.datasService.deletePoste(Number(this.departementSelectionne), Number(position));
         this.updateEmployes(-1);
     }
+    addEmploye(prenom: String, nom: String) {
+        this.datasService.addEmploye(this.departementSelectionne, this.posteSelectionne, prenom, nom);
+
+    }
+    deleteEmploye(position: Number) {
+        this.datasService.deleteEmploye(this.departementSelectionne, this.posteSelectionne,position);
+    }
 }
 
 @Component({
@@ -193,14 +200,17 @@ class DepartementDetail {
 
 @Component({
     selector: 'poste',
-    properties: ['poste']
+    properties: ['poste'],
+    appInjector: [CustomValidator]
 })
 @View({
     templateUrl: 'templates/poste.html',
-    directives: [NgFor]
+    directives: [NgFor,formDirectives]
 })
 class PosteDetail
 {
+    employeForm:ControlGroup;
+
     employes: Array<Employe>;
     app: App;
     isShowEmploye: Boolean = false;
@@ -208,12 +218,32 @@ class PosteDetail
     constructor(@Parent() app: App){
         this.app = app;
         this.app.registerPoste(this);
+
+        this.employeForm = new ControlGroup({
+            prenom: new Control("", Validators.required),
+            nom: new Control("", Validators.required)
+        });
     }
 
     updateEmployes(employes: Array<Employe>) {
         this.employes = employes;
     }
+
+    deleteEmploye(position: Number) {
+        this.app.deleteEmploye(position);
+    }
+
+    addEmploye(e) {
+        e.preventDefault();
+        if(this.employeForm.valid) { // return true or false, depending on the form state
+            this.app.addEmploye(this.employeForm.value.nom, this.employeForm.value.prenom);
+
+        } else {
+            console.error("invalid form", this.employeForm);
+        }
+    }
 }
+
 
 
 bootstrap(App);

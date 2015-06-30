@@ -63,6 +63,13 @@ export class DatasService {
 		this.datas[positionDept].postes.splice(positionPoste, 1);
 	}
 
+	addEmploye(positionDept: number, positionPoste: number, prenom: String, nom: String) {
+		this.datas[positionDept].postes[positionPoste].employes.push(new Employe(prenom, nom));
+	}
+	deleteEmploye(posDep: number, posPoste: number, posEmploye: number) {
+		this.datas[posDep].postes[posPoste].employes.splice(posEmploye, 1);
+	}
+
 	getDatas() {
 		return this.datas;
 	}
