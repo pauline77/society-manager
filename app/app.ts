@@ -56,25 +56,25 @@ class App {
             this.departementSelectionne = null;
             this.departementDetail.updatePostes(new Array<Poste>);
             this.updateEmployes(-1);
-            this.departementDetail.hasPost = false;
+            this.departementDetail.isShowPoste = false;
         }
         else {
             this.departementSelectionne = index;
             this.departementDetail.updatePostes(this.datas[index].postes);
-            this.departementDetail.hasPost = true;
+            this.departementDetail.isShowPoste = true;
         }
     }
 
     updateEmployes(index: Number) {
         if(index < 0) {
             this.posteSelectionne = null;
+            this.posteDetail.isShowPoste = false;
             this.posteDetail.updateEmployes(new Array<Employe>);
-            this.posteDetail.hasPost = false;
         }
         else {
             this.posteSelectionne = index;
+            this.posteDetail.isShowPoste = true;
             this.posteDetail.updateEmployes(this.datas[this.departementSelectionne].postes[index].employes);
-            this.posteDetail.hasPost = true;
         }
     }
 
@@ -163,7 +163,7 @@ class Society {
 class DepartementDetail {
     app: App;
     postes: Array<Poste>;
-    hasPost: Boolean = false;
+    isShowPoste: Boolean = false;
     posteForm:ControlGroup;
 
     constructor(@Parent() app: App){
@@ -190,6 +190,7 @@ class DepartementDetail {
 
     updatePostes(postes: Array<Poste>) {
         this.postes = postes;
+        console.log(this.isShowPoste);
     }
 
     afficherEmployes(index: Number) {
