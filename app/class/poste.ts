@@ -10,7 +10,7 @@ export class Poste
         this.employes = employes;
     }
 
-    addEmploye(nom: String, prenom: String, ddn: Date, sexe: String) {
-        this.employes.push(new Employe(nom, prenom, ddn, sexe));
+    addEmploye(nom: String, prenom: String) {
+        this.employes.push(new Employe(nom, prenom));
     }
 }

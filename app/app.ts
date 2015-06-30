@@ -52,29 +52,31 @@ class App {
     }
 
     updatePostes(index: Number) {
+        if(typeof(index) == "number") {
         if(index < 0) {
             this.departementSelectionne = null;
-            this.departementDetail.updatePostes(new Array<Poste>);
+            this.departementDetail.updatePostes([]);
             this.updateEmployes(-1);
             this.departementDetail.isShowPoste = false;
         }
         else {
             this.departementSelectionne = index;
-            this.departementDetail.updatePostes(this.datas[index].postes);
+            this.departementDetail.updatePostes(this.datas[Number(index)].postes);
             this.departementDetail.isShowPoste = true;
+        }
         }
     }
 
     updateEmployes(index: Number) {
         if(index < 0) {
             this.posteSelectionne = null;
-            this.posteDetail.isShowPoste = false;
-            this.posteDetail.updateEmployes(new Array<Employe>);
+            this.posteDetail.isShowEmploye = false;
+            this.posteDetail.updateEmployes([]);
         }
         else {
             this.posteSelectionne = index;
-            this.posteDetail.isShowPoste = true;
-            this.posteDetail.updateEmployes(this.datas[this.departementSelectionne].postes[index].employes);
+            this.posteDetail.isShowEmploye = true;
+            this.posteDetail.updateEmployes(this.datas[Number(this.departementSelectionne)].postes[Number(index)].employes);
         }
     }
 
@@ -83,16 +85,16 @@ class App {
     }
 
     deleteDepartement(position: Number) {
-        this.datasService.deleteDepartement(position);
+        this.datasService.deleteDepartement(Number(position));
         this.updatePostes(-1);
     }
 
     addPoste(poste: String) {
-        this.datasService.addPoste(this.departementSelectionne, poste);
+        this.datasService.addPoste(Number(this.departementSelectionne), poste);
     }
 
     deletePoste(position: Number) {
-        this.datasService.deletePoste(this.departementSelectionne, position);
+        this.datasService.deletePoste(Number(this.departementSelectionne), Number(position));
         this.updateEmployes(-1);
     }
 }
@@ -113,7 +115,6 @@ class Society {
 	departements: Array<Departement>;
 
     departementForm:ControlGroup;
-
 
 	constructor(@Parent() app: App, customValidator: CustomValidator) {
         this.app = app;
@@ -142,14 +143,6 @@ class Society {
     deleteDepartement(position: Number) {
         this.app.deleteDepartement(position);
     }
-
-    // updateDepartementDetail(postes) {
-    //     this.departementDetail.updatePostes(postes);
-    // }
-
-    // registerDepartementDetail(departementDetail: DepartementDetail){
-    //     this.departementDetail = departementDetail;
-    // }
 }
 
 @Component({
@@ -190,7 +183,6 @@ class DepartementDetail {
 
     updatePostes(postes: Array<Poste>) {
         this.postes = postes;
-        console.log(this.isShowPoste);
     }
 
     afficherEmployes(index: Number) {
@@ -211,7 +203,7 @@ class PosteDetail
 {
     employes: Array<Employe>;
     app: App;
-    hasEmployes: Boolean = false;
+    isShowEmploye: Boolean = false;
 
     constructor(@Parent() app: App){
         this.app = app;
