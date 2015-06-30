@@ -2,25 +2,12 @@ import {Employe} from 'class/employe';
 
 export class Poste
 {
-    private libelle: String;
-    private employes: Array<Employe>;
+    libelle: String;
+    employes: Array<Employe>;
 
     constructor(libelle: String, employes: Array<Employe> = []) {
         this.libelle = libelle;
         this.employes = employes;
-    }
-
-    getLibelle() {
-        return this.libelle;
-    }
-
-    setLibelle(libelle: String) {
-        this.libelle = libelle;
-        return this;
-    }
-
-    getEmployes() {
-        return this.employes;
     }
 
     addEmploye(nom: String, prenom: String, ddn: Date, sexe: String) {
