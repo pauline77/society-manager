@@ -51,12 +51,16 @@ export class DatasService {
 		this.datas.push(new Departement(libelle));
 	}
 
-	deleteDepartement(position: number) {
-		this.datas.splice(position, 1);
+	deleteDepartement(positionDept: number) {
+		this.datas.splice(positionDept, 1);
 	}
 
 	addPoste(position: number, libelle: String) {
 		this.datas[position].postes.push(new Poste(libelle));
+	}
+
+	deletePoste(positionDept: number, positionPoste: number) {
+		this.datas[positionDept].postes.splice(positionPoste, 1);
 	}
 
 	getDatas() {

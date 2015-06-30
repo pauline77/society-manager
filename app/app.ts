@@ -87,9 +87,14 @@ class App {
         this.updatePostes(-1);
     }
 
-    // addPoste(poste: String) {
-    //     this.datasService.addDepartement(dept);
-    // }
+    addPoste(poste: String) {
+        this.datasService.addPoste(this.departementSelectionne, poste);
+    }
+
+    deletePoste(position: Number) {
+        this.datasService.deletePoste(this.departementSelectionne, position);
+        this.updateEmployes(-1);
+    }
 }
 
 @Component({
@@ -108,7 +113,7 @@ class Society {
 	departements: Array<Departement>;
 
     departementForm:ControlGroup;
-    posteForm:ControlGroup;
+
 
 	constructor(@Parent() app: App, customValidator: CustomValidator) {
         this.app = app;
@@ -117,10 +122,6 @@ class Society {
 
         this.departementForm = new ControlGroup({
             departement: new Control("", customValidator.departementExist)
-        });
-
-        this.posteForm = new ControlGroup({
-            poste: new Control("", Validators.required)
         });
 	}
 
@@ -138,15 +139,6 @@ class Society {
         }
     }
 
-    // addPoste(e) {
-    //     e.preventDefault();
-    //     if(this.posteForm.valid) { // return true or false, depending on the form state
-    //         this.app.addPoste(this.posteForm.value.poste);
-    //     } else {
-    //         console.error("invalid form", this.departementForm);
-    //     }
-    // }
-
     deleteDepartement(position: Number) {
         this.app.deleteDepartement(position);
     }
@@ -161,20 +153,39 @@ class Society {
 }
 
 @Component({
-    selector: 'departement'
+    selector: 'departement',
+    appInjector: [CustomValidator]
 })
 @View({
     templateUrl: 'templates/departement.html',
-    directives: [NgFor]
+    directives: [NgFor,formDirectives]
 })
 class DepartementDetail {
     app: App;
     postes: Array<Poste>;
     hasPost: Boolean = false;
+    posteForm:ControlGroup;
 
     constructor(@Parent() app: App){
         this.app = app;
         this.app.registerDepartement(this);
+
+        this.posteForm = new ControlGroup({
+            poste: new Control("", Validators.required)
+        });
+    }
+
+    addPoste(e) {
+        e.preventDefault();
+        if(this.posteForm.valid) { // return true or false, depending on the form state
+            this.app.addPoste(this.posteForm.value.poste);
+        } else {
+            console.error("invalid form", this.posteForm);
+        }
+    }
+
+    deletePoste(position: Number) {
+        this.app.deletePoste(position);
     }
 
     updatePostes(postes: Array<Poste>) {
