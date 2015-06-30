@@ -55,6 +55,10 @@ export class DatasService {
 		this.datas.splice(position, 1);
 	}
 
+	addPoste(libelle: String) {
+		this.datas.push(new Poste(libelle));
+	}
+
 	getDatas() {
 		return this.datas;
 	}

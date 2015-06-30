@@ -1,4 +1,11 @@
-<h1>les postes</h1>
+<!-- <div *ng-if="postes == 'undefined'">Aucun poste</div>
+<div *ng-if="postes.length > 0">
+
+</div> -->
+<form [ng-form-model]='posteForm'>
+	<p><input type='text' ng-control='poste' placeholder="Nom du poste">
+	<button class="btn btn-sm btn-default" (click)='addPoste($event)'>Ajouter</button></p>
+</form>
 <ul>
 	<li *ng-for="#poste of postes; #i = index">
 		{{poste.libelle}}
