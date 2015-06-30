@@ -6,9 +6,8 @@
         <div class="panel-body">
             <ul>
                 <li *ng-for="#employe of employes; #i = index">
-                    <button class="btn btn-xs btn-danger emplDelete" (click)="deleteEmploye(i)">x</button>
+                    <button class="btn btn-xs btn-danger btnDelete" (click)="deleteEmploye(i)">x</button>
                     <strong><em>{{employe.prenom}} {{employe.nom}}</em></strong>
-                    <!-- <button (click)="updateDepartement(i)">/</button> -->
                 </li>
             </ul>
         </div>

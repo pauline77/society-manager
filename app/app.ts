@@ -78,10 +78,18 @@ class App {
         }
     }
 
+    addDepartement(dept: String) {
+        this.datasService.addDepartement(dept);
+    }
+
     deleteDepartement(position: Number) {
         this.datasService.deleteDepartement(position);
         this.updatePostes(-1);
     }
+
+    // addPoste(poste: String) {
+    //     this.datasService.addDepartement(dept);
+    // }
 }
 
 @Component({
@@ -99,21 +107,21 @@ class Society {
     app: App;
 	departements: Array<Departement>;
 
-    // departementForm:ControlGroup;
-    // posteForm:ControlGroup;
+    departementForm:ControlGroup;
+    posteForm:ControlGroup;
 
 	constructor(@Parent() app: App, customValidator: CustomValidator) {
         this.app = app;
         this.app.registerSociety(this);
 		this.departements = this.app.datas;
 
-        // this.departementForm = new ControlGroup({
-        //     departement: new Control("", customValidator.departementExist)
-        // });
+        this.departementForm = new ControlGroup({
+            departement: new Control("", customValidator.departementExist)
+        });
 
-        // this.posteForm = new ControlGroup({
-        //     poste: new Control("", Validators.required)
-        // });
+        this.posteForm = new ControlGroup({
+            poste: new Control("", Validators.required)
+        });
 	}
 
     afficherPostes(index: Number) {
@@ -121,19 +129,19 @@ class Society {
         this.app.updateEmployes(-1);
     }
 
-    // addDepartement(e) {
-    //     e.preventDefault();
-    //     if(this.departementForm.valid) { // return true or false, depending on the form state
-    //         this.datasService.addDepartement(this.departementForm.value.departement);
-    //     } else {
-    //         console.error("invalid form", this.departementForm);
-    //     }
-    // }
+    addDepartement(e) {
+        e.preventDefault();
+        if(this.departementForm.valid) { // return true or false, depending on the form state
+            this.app.addDepartement(this.departementForm.value.departement);
+        } else {
+            console.error("invalid form", this.departementForm);
+        }
+    }
 
     // addPoste(e) {
     //     e.preventDefault();
     //     if(this.posteForm.valid) { // return true or false, depending on the form state
-    //         this.datasService.addPoste(this.posteForm.value.poste);
+    //         this.app.addPoste(this.posteForm.value.poste);
     //     } else {
     //         console.error("invalid form", this.departementForm);
     //     }

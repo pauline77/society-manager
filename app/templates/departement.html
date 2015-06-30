@@ -8,14 +8,16 @@
             <h3 class="panel-title">Liste des postes</h3>
         </div>
         <div class="panel-body">
+			<form [ng-form-model]='posteForm'>
+                <p><input type='text' ng-control='poste' placeholder="Nom du poste">
+                <button class="btn btn-sm btn-default" (click)='addPoste($event)'>Ajouter</button></p>
+            </form>
             <ul>
                 <li *ng-for="#poste of postes; #i = index">
-                    <button class="btn btn-xs btn-danger posteDelete" (click)="deletePoste(i)">x</button>
+                    <button class="btn btn-xs btn-danger btnDelete" (click)="deletePoste(i)">x</button>
                     <strong><em (click)="afficherEmployes(i)">{{poste.libelle}}</em></strong>
-                    <!-- <button (click)="updateDepartement(i)">/</button> -->
                 </li>
             </ul>
         </div>
     </div>
 </div>
-

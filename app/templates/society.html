@@ -3,16 +3,15 @@
         <div class="panel-heading">
             <h3 class="panel-title">Liste des départements</h3>
         </div>
-        <div class="panel-body"><!-- 
+        <div class="panel-body">
             <form [ng-form-model]='departementForm'>
                 <p><input type='text' ng-control='departement' placeholder="Nom département">
                 <button class="btn btn-sm btn-default" (click)='addDepartement($event)'>Ajouter</button></p>
-            </form> -->
+            </form>
             <ul>
                 <li *ng-for="#departement of departements; #i = index">
-                    <button class="btn btn-xs btn-danger deptDelete" (click)="deleteDepartement(i)">x</button>
+                    <button class="btn btn-xs btn-danger btnDelete" (click)="deleteDepartement(i)">x</button>
                     <strong><em (click)="afficherPostes(i)">{{departement.libelle}}</em></strong>
-                    <!-- <button (click)="updateDepartement(i)">/</button> -->
                 </li>
             </ul>
         </div>
