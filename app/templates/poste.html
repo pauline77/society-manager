@@ -4,12 +4,14 @@
             <h3 class="panel-title">Liste des employés</h3>
         </div>
         <div class="panel-body">
-            <form [ng-form-model]='employeForm' onclick="return false">
-                <p>
-                <input type='text' ng-control='nom' placeholder="Nom de l'employé">
-                <input type='text' ng-control='prenom' placeholder="Prénom de l'employé">
-                <button class="btn btn-sm btn-default" (click)='addEmploye($event)'>Ajouter</button></p>
-            </form>
+            <div [hidden]="!isShowEmploye">
+                <form [ng-form-model]='employeForm' onclick="return false">
+                    <p>
+                    <input type='text' ng-control='nom' placeholder="Nom de l'employé">
+                    <input type='text' ng-control='prenom' placeholder="Prénom de l'employé">
+                    <button class="btn btn-sm btn-default" (click)='addEmploye($event)'>Ajouter</button></p>
+                </form>
+            </div>
             <ul>
                 <li *ng-for="#employe of employes; #i = index">
                     <button class="btn btn-xs btn-danger btnDelete" (click)="deleteEmploye(i)">x</button>
