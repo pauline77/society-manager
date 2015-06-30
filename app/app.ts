@@ -9,167 +9,199 @@ import {StorageService} from 'services/storageService';
 import {DatasService} from 'services/datasService';
 import {CustomValidator} from 'validators/customValidator';
 
-@Component({
-    selector: 'society',
-    appInjector: [CustomValidator, DatasService]
-})
-@View({
-    templateUrl: 'templates/index.html',
-    directives: [
-        NgFor,
-        forwardRef(()=> DepartementItem),
-        forwardRef(()=> PosteItem),
-        forwardRef(()=> DepartementDetail),
-        formDirectives
-    ]
-})
-export class Society {
-	departements: Array<Departement>;
-	datasService: DatasService;
-    departementDetail: DepartementDetail;
-    departementForm:ControlGroup;
-    posteForm:ControlGroup;
-
-	constructor(customValidator: CustomValidator, datasService: DatasService) {
-		this.datasService = datasService;
-		this.departements = this.datasService.getDatas();
-
-        this.departementForm = new ControlGroup({
-            departement: new Control("", customValidator.departementExist)
-        });
-
-        this.posteForm = new ControlGroup({
-            poste: new Control("", Validators.required)
-        });
-	}
-
-    addDepartement(e) {
-        e.preventDefault();
-        if(this.departementForm.valid) { // return true or false, depending on the form state
-            this.datasService.addDepartement(this.departementForm.value.departement);
-        } else {
-            console.error("invalid form", this.departementForm);
-        }
-    }
-
-    addPoste(e) {
-        e.preventDefault();
-        if(this.posteForm.valid) { // return true or false, depending on the form state
-            this.datasService.addPoste(this.posteForm.value.poste);
-        } else {
-            console.error("invalid form", this.departementForm);
-        }
-    }
-
-    deleteDepartement(position: number) {
-        this.datasService.deleteDepartement(position);
-    }
-
-    updateDepartementDetail(postes) {
-        this.departementDetail.updatePostes(postes);
-    }
-
-    registerDepartementDetail(departementDetail: DepartementDetail){
-        this.departementDetail = departementDetail;
-    }
-}
 
 @Component({
-    selector: 'departement',
+    selector: 'app',
     appInjector: [DatasService]
 })
 @View({
-  templateUrl: 'templates/departement.html',
-    directives: [NgFor, forwardRef(()=> PosteItem)]
+    templateUrl: 'templates/app.html',
+    directives: [
+        NgFor,
+        forwardRef(()=>Society),
+        forwardRef(()=>DepartementDetail),
+        forwardRef(()=>PosteDetail)
+    ]
 })
-class DepartementDetail {
-    society:Society;
-    postes: Array<Poste>;
+class App {
+    society: Society;
+    departementDetail: DepartementDetail;
+    posteDetail: PosteDetail;
 
-    constructor(@Parent() society: Society){
-        this.society = society;
-        this.society.registerDepartementDetail(this);
+    datas: Array<Departement>;
+    departementSelectionne: Number;
+    posteSelectionne: Number;
+
+    datasService: DatasService;
+
+    constructor(datasService: DatasService) {
+        this.datasService = datasService;
+        this.datas = this.datasService.getDatas();
     }
 
-    updatePostes(postes) {
-        this.postes = postes;
-        console.log(this.postes);
+    registerSociety(society: Society) {
+        this.society = society;
+    }
+
+    registerDepartement(departementDetail: DepartementDetail) {
+        this.departementDetail = departementDetail;
+    }
+
+    registerPoste(posteDetail: PosteDetail) {
+        this.posteDetail = posteDetail;
+    }
+
+    updatePostes(index: Number) {
+        if(index < 0) {
+            this.departementSelectionne = null;
+            this.departementDetail.updatePostes(new Array<Poste>);
+            this.updateEmployes(-1);
+            this.departementDetail.hasPost = false;
+        }
+        else {
+            this.departementSelectionne = index;
+            this.departementDetail.updatePostes(this.datas[index].postes);
+            this.departementDetail.hasPost = true;
+        }
+    }
+
+    updateEmployes(index: Number) {
+        if(index < 0) {
+            this.posteSelectionne = null;
+            this.posteDetail.updateEmployes(new Array<Employe>);
+            this.posteDetail.hasPost = false;
+        }
+        else {
+            this.posteSelectionne = index;
+            this.posteDetail.updateEmployes(this.datas[this.departementSelectionne].postes[index].employes);
+            this.posteDetail.hasPost = true;
+        }
+    }
+
+    deleteDepartement(position: Number) {
+        this.datasService.deleteDepartement(position);
+        this.updatePostes(-1);
     }
 }
 
 @Component({
-    selector: 'departement-item',
-    properties: ['departement']
+    selector: 'society',
+    appInjector: [CustomValidator]
 })
 @View({
-    templateUrl: 'templates/departement-item.html',
-    directives: [forwardRef(()=>PosteItem)]
+    templateUrl: 'templates/society.html',
+    directives: [
+        NgFor,
+        formDirectives
+    ]
 })
-export class DepartementItem
-{
-    departement: Departement;
-    society: Society;
+class Society {
+    app: App;
+	departements: Array<Departement>;
 
-    constructor(@Parent() society: Society) {
-        this.society = society;
+    // departementForm:ControlGroup;
+    // posteForm:ControlGroup;
+
+	constructor(@Parent() app: App, customValidator: CustomValidator) {
+        this.app = app;
+        this.app.registerSociety(this);
+		this.departements = this.app.datas;
+
+        // this.departementForm = new ControlGroup({
+        //     departement: new Control("", customValidator.departementExist)
+        // });
+
+        // this.posteForm = new ControlGroup({
+        //     poste: new Control("", Validators.required)
+        // });
+	}
+
+    afficherPostes(index: Number) {
+        this.app.updatePostes(index);
+        this.app.updateEmployes(-1);
     }
 
-    afficherPoste(postes) {
-        this.society.updateDepartementDetail(postes);
+    // addDepartement(e) {
+    //     e.preventDefault();
+    //     if(this.departementForm.valid) { // return true or false, depending on the form state
+    //         this.datasService.addDepartement(this.departementForm.value.departement);
+    //     } else {
+    //         console.error("invalid form", this.departementForm);
+    //     }
+    // }
+
+    // addPoste(e) {
+    //     e.preventDefault();
+    //     if(this.posteForm.valid) { // return true or false, depending on the form state
+    //         this.datasService.addPoste(this.posteForm.value.poste);
+    //     } else {
+    //         console.error("invalid form", this.departementForm);
+    //     }
+    // }
+
+    deleteDepartement(position: Number) {
+        this.app.deleteDepartement(position);
+    }
+
+    // updateDepartementDetail(postes) {
+    //     this.departementDetail.updatePostes(postes);
+    // }
+
+    // registerDepartementDetail(departementDetail: DepartementDetail){
+    //     this.departementDetail = departementDetail;
+    // }
+}
+
+@Component({
+    selector: 'departement'
+})
+@View({
+    templateUrl: 'templates/departement.html',
+    directives: [NgFor]
+})
+class DepartementDetail {
+    app: App;
+    postes: Array<Poste>;
+    hasPost: Boolean = false;
+
+    constructor(@Parent() app: App){
+        this.app = app;
+        this.app.registerDepartement(this);
+    }
+
+    updatePostes(postes: Array<Poste>) {
+        this.postes = postes;
+    }
+
+    afficherEmployes(index: Number) {
+        this.app.updateEmployes(index);
     }
 }
 
 
 @Component({
-    selector: 'poste-item',
+    selector: 'poste',
     properties: ['poste']
 })
 @View({
-    template: ``,
-    directives: [forwardRef(()=>EmployeItem)]
+    templateUrl: 'templates/poste.html',
+    directives: [NgFor]
 })
-export class PosteItem
+class PosteDetail
 {
-    poste: Poste;
-    private departement: DepartementItem;
+    employes: Array<Employe>;
+    app: App;
+    hasEmployes: Boolean = false;
 
-    constructor(@Parent() departement: DepartementItem) {
-        this.departement = departement;
+    constructor(@Parent() app: App){
+        this.app = app;
+        this.app.registerPoste(this);
     }
 
-    getDepartement() {
-        return this.departement;
+    updateEmployes(employes: Array<Employe>) {
+        this.employes = employes;
     }
 }
 
 
-@Component({
-    selector: 'employe-item',
-    properties: ['employe']
-})
-@View({
-    templateUrl: ''
-})
-export class EmployeItem
-{
-    employe: Employe;
-    private poste: PosteItem;
-
-    constructor(@Parent() poste: PosteItem) {
-        this.poste = poste;
-    }
-
-    getPoste() {
-        return this.poste;
-    }
-
-    updateDepartementDetail(postes) {
-        this.departementDetail.updatePostes(postes);
-    }
-
-    registerDepartementDetail(departementDetail: DepartementDetail){
-        this.departementDetail = departementDetail;
-    }
-}
-
-bootstrap(Society);
+bootstrap(App);
